@@ -21,6 +21,10 @@ CHANGELOG). Les notes privées sont dans `CLAUDE.local.md` et `theme/` (non vers
 - `src/screens/*` : un fichier par écran. `src/components/*` : formulaires jeu/joueur, graphique.
 - Apparence : variables CSS dans `:root` de `src/index.css` (clair + sombre), textes et images via le module
   `virtual:brand` (plugin dans `vite.config.ts`). Thème par défaut dans `src/brand/`, remplacé par `theme/` s'il existe.
+- Modes de comptage (`GameKind` dans `types.ts`) : points, wins (gagnant de chaque manche), sheet (feuille de score
+  par catégories), coop. Catalogue de jeux : `src/catalogue.ts` (recherche tolérante), données via `virtual:catalogue`.
+- Vérification de bout en bout : `node ~/outils/capture/scenario-modes.mjs <url> <dossier> <seed.json>` joue une partie
+  de chaque mode et capture chaque étape (seed = joueurs seuls).
 - Couleurs des joueurs : palette catégorielle `--p0`…`--p7` dans `index.css` (validée daltonisme, clair et sombre).
 
 ## À chaque nouvelle version

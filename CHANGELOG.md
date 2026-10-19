@@ -2,6 +2,20 @@
 
 Toutes les évolutions de Marque-Points. Chaque version fait l'objet d'une Release GitHub.
 
+## [1.3.0] - 2026-10-20
+
+### Nouveautés
+- **Catalogue de jeux avec recherche** : à la création d'une partie, tapez quelques lettres pour trouver votre jeu, même avec une faute de frappe ou sans accents. Ses règles de comptage sont déjà réglées.
+- **Rappel des règles** du jeu, affiché au lancement et consultable pendant la partie.
+- **Quatre façons de compter**, selon le jeu :
+  - **Points à chaque manche** (Skyjo, 6 qui prend !…), comme avant ;
+  - **Qui gagne chaque manche** (Mr Jack, duels…) : un toucher sur le gagnant ;
+  - **Feuille de score finale** (7 Wonders…) : l'app guide le décompte catégorie par catégorie ;
+  - **Coopératif** (Unlock!, Sky Team…) : victoire ou défaite de toute l'équipe, avec score et scénario facultatifs.
+
+### Corrections
+- Le message « Annuler » d'une manche ne reste plus affiché en changeant d'écran.
+
 ## [1.2.0] - 2026-10-19
 
 ### Corrections

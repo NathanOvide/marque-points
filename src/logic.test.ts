@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computeStats, dealerFor, endReason, newMatch, standings, totals, winners } from './logic'
+import { computeStats, dealerFor, endReason, hasScores, kindOf, newMatch, sheetProgress, standings, totals, winners } from './logic'
 import type { GameType, Match, Player } from './types'
 
 const game = (patch: Partial<GameType> = {}): GameType => ({
@@ -59,5 +59,64 @@ describe('statistiques', () => {
     expect(s.total).toBe(2)
     expect(s.players.find((p) => p.id === 'a')).toMatchObject({ wins: 1, played: 2, winRate: 0.5 })
     expect(s.games[0]).toMatchObject({ played: 2, record: { name: 'A', total: 10 } })
+  })
+})
+
+describe('recherche dans le catalogue', async () => {
+  const { search } = await import('./catalogue')
+  const items = [{ name: 'Skyjo' }, { name: '6 qui prend !', aliases: ['six qui prend'] }, { name: "Time's Up!" }, { name: 'Les Aventuriers du Rail' }, { name: 'Sky Team' }]
+  const names = (q: string) => search(items, q).map((i) => i.name)
+
+  it('trouve par début de nom, de mot, ou alias, sans accents ni ponctuation', () => {
+    expect(names('sky')).toEqual(['Sky Team', 'Skyjo'])
+    expect(names('prend')[0]).toBe('6 qui prend !')
+    expect(names('six')[0]).toBe('6 qui prend !')
+    expect(names('times up')[0]).toBe("Time's Up!")
+    expect(names('timesup')[0]).toBe("Time's Up!")
+    expect(names('aventurier')[0]).toBe('Les Aventuriers du Rail')
+  })
+
+  it('tolère les fautes de frappe', () => {
+    expect(names('skijo')[0]).toBe('Skyjo')
+    expect(names('avanturiers')[0]).toBe('Les Aventuriers du Rail')
+  })
+})
+
+describe('modes de jeu', () => {
+  it('feuille de score : somme des catégories, fin quand tout est compté', () => {
+    const cats = [{ id: 'x', label: 'X' }, { id: 'y', label: 'Y' }]
+    let m = newMatch(game({ kind: 'sheet', categories: cats }), players, {}, 0)
+    expect(hasScores(m)).toBe(false)
+    m = { ...m, sheet: { x: { a: 3, b: 5, c: -1 } } }
+    expect(totals(m)).toEqual({ a: 3, b: 5, c: -1 })
+    expect(sheetProgress(m)).toMatchObject({ done: 1, total: 2, next: cats[1] })
+    expect(endReason(m)).toBeNull()
+    m = { ...m, sheet: { ...m.sheet, y: { a: 4, b: 0, c: 0 } } }
+    expect(endReason(m)).not.toBeNull()
+    expect(winners(m).map((p) => p.id)).toEqual(['a'])
+  })
+
+  it('manches gagnées : compte les victoires, fin au nombre de victoires visé', () => {
+    const m = play(newMatch(game({ kind: 'wins', endMode: 'target', target: 2 }), players, {}, 0), [1, 0, 0], [0, 1, 0], [1, 0, 0])
+    expect(totals(m)).toEqual({ a: 2, b: 1, c: 0 })
+    expect(endReason(m)).toContain('2 victoires')
+    const single = play(newMatch(game({ kind: 'wins', endMode: 'rounds', maxRounds: 1 }), players, {}, 0), [0, 1, 0])
+    expect(endReason(single)).not.toBeNull()
+  })
+
+  it('coopératif : toute l\'équipe gagne ou perd', () => {
+    const m = newMatch(game({ kind: 'coop' }), players, {}, 0)
+    expect(winners(m)).toEqual([])
+    expect(winners({ ...m, coop: { won: true } }).map((p) => p.id)).toEqual(['a', 'b', 'c'])
+    expect(winners({ ...m, coop: { won: false } })).toEqual([])
+    const stats = computeStats([{ ...m, status: 'finished', coop: { won: true } }])
+    expect(stats.players.every((p) => p.wins === 1)).toBe(true)
+    expect(stats.games[0].record).toBeNull()
+  })
+
+  it('les parties d\'avant les modes restent en mode points', () => {
+    const m = newMatch(game(), players, {}, 0)
+    delete m.kind
+    expect(kindOf(m)).toBe('points')
   })
 })

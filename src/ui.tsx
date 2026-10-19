@@ -169,8 +169,12 @@ export function ToastHost() {
   const [t, setT] = useState<{ msg: string; action?: { label: string; run: () => void } } | null>(null)
   useEffect(() => {
     toastSetter = setT
+    // un toast (et son « Annuler ») ne concerne que l'écran où il est apparu
+    const clear = () => setT(null)
+    window.addEventListener('hashchange', clear)
     return () => {
       toastSetter = null
+      window.removeEventListener('hashchange', clear)
     }
   }, [])
   if (!t) return null

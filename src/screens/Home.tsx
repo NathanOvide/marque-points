@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import brand from 'virtual:brand'
 import { isStandalone, useInstallPrompt } from '../install'
-import { standings } from '../logic'
+import { hasScores, kindOf, progressLabel, standings } from '../logic'
 import { useStore } from '../store'
 import { Avatar, fmtDate, go } from '../ui'
 
@@ -71,8 +71,8 @@ export default function Home() {
                 <span className="grow">
                   <b>{m.gameName}</b>
                   <span className="muted small">
-                    Manche {m.rounds.length + 1} · {m.players.length} joueurs
-                    {lead && m.rounds.length > 0 && ` · ${lead.player.name} en tête`}
+                    {progressLabel(m)} · {m.players.length} joueur{m.players.length > 1 ? 's' : ''}
+                    {lead && hasScores(m) && kindOf(m) !== 'coop' && ` · ${lead.player.name} en tête`}
                   </span>
                 </span>
                 <span className="pill">Reprendre ›</span>

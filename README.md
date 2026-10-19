@@ -41,6 +41,7 @@ remplace au build, s'il contient un `brand.json` :
 - `brand.json` : nom affiché, description, accroche, message de bienvenue, couleur de la barre, lien en pied de page,
   et images optionnelles (`logo`, `logoDark`, `ornament`) ; mêmes clés que `src/brand/brand.json`.
 - `theme.css` : redéfinit les variables CSS de `src/index.css` (couleurs, polices, arrondis…).
+- `catalogue.json` : jeux proposés à la création d'une partie (même format que `src/brand/catalogue.json`).
 - `public/` : icônes de l'app, générées avec `node scripts/icons.mjs <image> theme/public <fond> <taille>`.
 
 En CI, le thème est récupéré depuis le dépôt indiqué par la variable `THEME_REPO`, avec la clé SSH du secret

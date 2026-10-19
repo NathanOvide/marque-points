@@ -706,7 +706,9 @@ b.grow {
   font-weight: 600;
 }
 
-.field input[type='text']:not(.num) {
+.field input[type='text']:not(.num),
+.field textarea,
+.search {
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: 12px;
@@ -847,6 +849,64 @@ b.grow {
 
 .stepper .num {
   width: 64px;
+}
+
+textarea {
+  font: inherit;
+  color: inherit;
+  resize: vertical;
+}
+
+.search {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.inline-field .grow-input {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Rappel des règles */
+
+.rules summary {
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+
+.rules summary::after {
+  content: ' ›';
+  color: var(--muted);
+}
+
+.rules[open] summary::after {
+  content: ' ⌄';
+}
+
+.rules p {
+  margin: 8px 0 0;
+  color: var(--text-2);
+  font-size: 0.92rem;
+}
+
+.team p {
+  margin: 10px 0 0;
+}
+
+.total-unit {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--muted);
+  text-align: right;
+}
+
+.rounds th.cat {
+  white-space: normal;
+  min-width: 120px;
+  font-size: 0.85rem;
 }
 
 /* ---------- Feuilles (bottom sheets) ---------- */

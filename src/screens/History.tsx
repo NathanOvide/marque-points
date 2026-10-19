@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { winners } from '../logic'
+import { hasScores, kindOf, progressLabel, summaryLabel, winners } from '../logic'
 import { useStore } from '../store'
 import type { Match } from '../types'
 import { Avatar, Header, Hint, fmtDate, fmtTime, go } from '../ui'
@@ -62,7 +62,7 @@ export default function History() {
 }
 
 function MatchRow({ m }: { m: Match }) {
-  const w = m.status === 'finished' && m.rounds.length ? winners(m) : []
+  const w = m.status === 'finished' && hasScores(m) && kindOf(m) !== 'coop' ? winners(m) : []
   return (
     <button className="card match-card" onClick={() => go(`partie/${m.id}`)}>
       <span className="game-emoji">{m.gameEmoji}</span>
@@ -74,7 +74,7 @@ function MatchRow({ m }: { m: Match }) {
           ))}
         </span>
         <span className="muted small">
-          {fmtDate(m.createdAt)} à {fmtTime(m.createdAt)} · {m.rounds.length} manche{m.rounds.length > 1 ? 's' : ''}
+          {fmtDate(m.createdAt)} à {fmtTime(m.createdAt)} · {m.status === 'playing' ? progressLabel(m) : summaryLabel(m)}
         </span>
         {w.length > 0 && <span className="small">🏆 {w.map((p) => p.name).join(' et ')}</span>}
       </span>

@@ -10,13 +10,15 @@ import pkg from './package.json' with { type: 'json' }
 const brandDir = resolve(existsSync('theme/brand.json') ? 'theme' : 'src/brand')
 const brand = JSON.parse(readFileSync(`${brandDir}/brand.json`, 'utf8'))
 const images = ['logo', 'logoDark', 'ornament'].filter((k) => brand[k])
+// Catalogue des jeux proposés à la création d'une partie (celui du thème s'il en a un)
+const catalogueFile = resolve(existsSync(`${brandDir}/catalogue.json`) ? brandDir : 'src/brand', 'catalogue.json')
 
 const escapeHtml = (s: string) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 
 function brandPlugin(): Plugin {
   return {
     name: 'brand',
-    resolveId: (id) => (id === 'virtual:brand' ? '\0virtual:brand' : undefined),
+    resolveId: (id) => (id === 'virtual:brand' ? '\0virtual:brand' : id === 'virtual:catalogue' ? catalogueFile : undefined),
     load(id) {
       if (id !== '\0virtual:brand') return
       const imports = images.map((k) => `import ${k} from ${JSON.stringify(`${brandDir}/${brand[k]}`)}`).join('\n')

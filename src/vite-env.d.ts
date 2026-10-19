@@ -18,3 +18,9 @@ declare module 'virtual:brand' {
   }
   export default brand
 }
+
+/** Catalogue des jeux (src/brand/catalogue.json, ou theme/catalogue.json s'il existe). */
+declare module 'virtual:catalogue' {
+  const catalogue: import('./catalogue').CatalogGame[]
+  export default catalogue
+}
