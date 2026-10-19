@@ -1,0 +1,38 @@
+name: Release
+
+# Chaque tag vX.Y.Z crée une Release GitHub dont les notes viennent de CHANGELOG.md
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Notes de version
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '
+            $0 ~ "^## \\[?" v "\\]?" { on = 1; next }
+            on && /^## / { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          if [ ! -s notes.md ]; then echo "Aucune entrée $version dans CHANGELOG.md" >&2; exit 1; fi
+          cat notes.md
+      - name: Archive du site
+        run: cd dist && zip -qr "../marque-points-${GITHUB_REF_NAME}.zip" .
+      - name: Créer la Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" --title "Marque-Points $GITHUB_REF_NAME" --notes-file notes.md "marque-points-${GITHUB_REF_NAME}.zip"

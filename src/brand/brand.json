@@ -1,0 +1,10 @@
+{
+  "name": "Marque-Points",
+  "fullName": "Marque-Points",
+  "description": "Comptez les points de vos jeux de société, manche après manche.",
+  "tagline": "Comptez les points de vos jeux de société, sans papier ni crayon.",
+  "welcome": "Bienvenue",
+  "themeColor": "#f4f4f1",
+  "backgroundColor": "#f4f4f1",
+  "link": null
+}
