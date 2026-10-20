@@ -2,6 +2,14 @@
 
 Toutes les évolutions de Marque-Points. Chaque version fait l'objet d'une Release GitHub.
 
+## [1.4.0] - 2026-10-20
+
+### Nouveautés
+- **Catalogue de jeux bien plus fourni** : plusieurs centaines de jeux prêts à l'emploi, chacun avec son mode de comptage et un rappel des règles.
+
+### Améliorations
+- Les jeux qui se comptent en une seule fois affichent « Score final » au lieu de « Feuille de score · 1 catégorie ».
+
 ## [1.3.0] - 2026-10-20
 
 ### Nouveautés
