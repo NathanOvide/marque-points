@@ -147,7 +147,9 @@ export function describeRules(g: Rules): string {
   if (kind === 'coop') return `Coopératif : on gagne ou on perd ensemble${g.scoreLabel ? ` · ${g.scoreLabel.toLowerCase()}` : ''}`
   if (kind === 'sheet') {
     const n = g.categories?.length ?? 0
-    return `Feuille de score · ${n} catégorie${n > 1 ? 's' : ''} · ${g.winMode === 'high' ? 'le plus' : 'le moins'} de points gagne`
+    const most = `${g.winMode === 'high' ? 'le plus' : 'le moins'} de points gagne`
+    if (n === 1) return `Score final · ${most}`
+    return `Feuille de score · ${n} catégories · ${most}`
   }
   if (kind === 'wins') {
     if (g.endMode === 'rounds' && g.maxRounds === 1) return 'Une partie, on note le gagnant'

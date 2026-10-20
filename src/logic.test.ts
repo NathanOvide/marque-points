@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computeStats, dealerFor, endReason, hasScores, kindOf, newMatch, sheetProgress, standings, totals, winners } from './logic'
+import { computeStats, dealerFor, describeRules, endReason, hasScores, kindOf, newMatch, sheetProgress, standings, totals, winners } from './logic'
 import type { GameType, Match, Player } from './types'
 
 const game = (patch: Partial<GameType> = {}): GameType => ({
@@ -94,6 +94,12 @@ describe('modes de jeu', () => {
     m = { ...m, sheet: { ...m.sheet, y: { a: 4, b: 0, c: 0 } } }
     expect(endReason(m)).not.toBeNull()
     expect(winners(m).map((p) => p.id)).toEqual(['a'])
+  })
+
+  it('feuille à une seule ligne : décrite comme un score final', () => {
+    const rules = game({ kind: 'sheet', categories: [{ id: 'f', label: 'Score final' }] })
+    expect(describeRules(rules)).toBe('Score final · le plus de points gagne')
+    expect(describeRules({ ...rules, categories: [{ id: 'x', label: 'X' }, { id: 'y', label: 'Y' }] })).toBe('Feuille de score · 2 catégories · le plus de points gagne')
   })
 
   it('manches gagnées : compte les victoires, fin au nombre de victoires visé', () => {
