@@ -38,3 +38,13 @@ CHANGELOG). Les notes privées sont dans `CLAUDE.local.md` et `theme/` (non vers
 
 - Une liste de **modèles de jeux** à inclure de base (préchargés au premier lancement).
 - Plus tard peut-être : partage du résultat, export/import JSON.
+## Économie de tokens
+
+Les règles de test et de sécurité de ce fichier restent prioritaires sur cette section.
+
+- Cherche avec `grep -n`, puis lis seulement la plage utile avec `sed -n`. Pas de `cat` de fichiers entiers ni de relecture d'un fichier déjà lu.
+- Regroupe les lectures et les commandes indépendantes dans une même réponse.
+- Filtre les sorties longues : `2>&1 | tail -30` pour les builds et les tests.
+- Attends la CI en une seule commande bloquante, sans la vérifier à plusieurs reprises.
+- Ne relance pas une vérification que le script de release va refaire juste après.
+- Réponses courtes, résultat d'abord. Ne récapitule pas le code écrit.
